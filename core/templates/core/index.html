@@ -1,0 +1,18 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Core App</title>
+  <link rel="stylesheet" href="{% static 'core/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Core App</h1>
+    <p>Hello from core app.</p>
+    <p><a href="/admin/">Go to admin</a> — <a href="{% url 'post_list' %}">Posts</a></p>
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

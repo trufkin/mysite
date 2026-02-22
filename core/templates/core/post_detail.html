@@ -1,0 +1,11 @@
+{% extends 'core/index.html' %}
+
+{% block content %}
+  <h2>{{ object.title }}</h2>
+  <div>{{ object.body|linebreaks }}</div>
+  <p>
+    <a href="{% url 'post_edit' object.pk %}">Edit</a> |
+    <a href="{% url 'post_delete' object.pk %}">Delete</a> |
+    <a href="{% url 'post_list' %}">Back to list</a>
+  </p>
+{% endblock %}
