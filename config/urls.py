@@ -20,9 +20,8 @@ from django.conf.urls.i18n import i18n_patterns
 from rest_framework.authtoken.views import obtain_auth_token
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
-# Non-localised URLs (API, admin, i18n helper)
+# Non-localised URLs (API, admin)
 urlpatterns = [
-    path('i18n/', include('django.conf.urls.i18n')),
     path('api/', include('core.api.urls')),
     path('api-token-auth/', obtain_auth_token),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
