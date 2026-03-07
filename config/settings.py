@@ -61,6 +61,9 @@ REST_FRAMEWORK = {
 # django-filter
 INSTALLED_APPS += ['django_filters']
 
+# drf-spectacular (OpenAPI docs)
+INSTALLED_APPS += ['drf_spectacular']
+
 # Pagination and filtering defaults for DRF
 REST_FRAMEWORK.update({
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -70,7 +73,15 @@ REST_FRAMEWORK.update({
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 })
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'mysite API',
+    'DESCRIPTION': 'REST API for mysite core app.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
