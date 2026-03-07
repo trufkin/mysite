@@ -28,9 +28,9 @@ class CoreViewTests(TestCase):
         self.post = Post.objects.create(title='Test Post', body='Body text')
 
     def test_index_view(self):
-        resp = self.client.get('/')
+        resp = self.client.get(reverse('home'))
         self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, 'Welcome to Core App')
+        self.assertContains(resp, 'Bolohan')
 
     def test_post_list_view(self):
         resp = self.client.get(reverse('post_list'))

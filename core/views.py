@@ -4,8 +4,12 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post
 
 
-def index(request):
-    return render(request, 'core/index.html')
+def home(request):
+    return render(request, 'core/home.html')
+
+
+def contacts(request):
+    return render(request, 'core/contacts.html')
 
 
 class PostListView(ListView):

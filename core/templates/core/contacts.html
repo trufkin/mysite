@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Контакты — Болохан
+  {% elif request.LANGUAGE_CODE == 'ro' %}Contacte — Bolohan
+  {% else %}Contacts — Bolohan
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if request.LANGUAGE_CODE == 'ru' %}
+
+  <h1>Контакты</h1>
+  <p>Если у вас есть вопросы о селе Болохан, свяжитесь с нами:</p>
+  <ul class="contacts-list">
+    <li><strong>Адрес:</strong> с. Болохан, Оргеевский район, Молдавия</li>
+    <li><strong>Email:</strong> <a href="mailto:info@bolohan.md">info@bolohan.md</a></li>
+  </ul>
+
+{% elif request.LANGUAGE_CODE == 'ro' %}
+
+  <h1>Contacte</h1>
+  <p>Dacă aveți întrebări despre satul Bolohan, contactați-ne:</p>
+  <ul class="contacts-list">
+    <li><strong>Adresă:</strong> s. Bolohan, raionul Orhei, Republica Moldova</li>
+    <li><strong>Email:</strong> <a href="mailto:info@bolohan.md">info@bolohan.md</a></li>
+  </ul>
+
+{% else %}
+
+  <h1>Contacts</h1>
+  <p>If you have any questions about Bolohan village, please get in touch:</p>
+  <ul class="contacts-list">
+    <li><strong>Address:</strong> Bolohan village, Orhei District, Republic of Moldova</li>
+    <li><strong>Email:</strong> <a href="mailto:info@bolohan.md">info@bolohan.md</a></li>
+  </ul>
+
+{% endif %}
+
+{% endblock %}

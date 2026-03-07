@@ -1,0 +1,192 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Болохан — {{ block.super }}{% elif request.LANGUAGE_CODE == 'ro' %}Bolohan — Sat din Raionul Orhei{% else %}Bolohan — Village in Orhei District{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if request.LANGUAGE_CODE == 'ru' %}
+
+  <div class="hero">
+    <h1>Село Болохан</h1>
+    <p class="hero-subtitle">Оргеевский район, Молдавия</p>
+  </div>
+
+  <section class="village-intro">
+    <p>
+      <strong>Село Болохан (молд. Bolohan)</strong> — село в Оргеевском районе Молдавии,
+      расположенное примерно в 40–50&nbsp;км к северу от Кишинёва. Оно не образует свою коммуну
+      и относится к сёлам, административно подчинённым району.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>История и происхождение</h2>
+    <p>
+      Согласно местным источникам, село сформировалось в <strong>1763 году</strong> на землях
+      молдавского поместья еврейского помещика по имени <strong>Лейба Арон</strong>, на площади
+      в несколько тысяч гектаров.
+    </p>
+    <p>
+      Название <em>«Болохан»</em> связывают с крупным камнем-«болованом» рядом с боярским двором,
+      от которого село получило своё имя.
+    </p>
+    <p>
+      В советских энциклопедиях и опросах указываются и другие приближённые даты — 1788 и 1867&nbsp;год,
+      но местная традиция и старожилы чаще называют 1763&nbsp;год.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>Население и развитие</h2>
+    <p>
+      В дореволюционный период село было небольшим, с примерно <strong>200 домами</strong> и около
+      <strong>800 жителей</strong>; жилищ и транспорта было мало, дороги почти не существовали.
+    </p>
+    <p>
+      В <strong>1928 году</strong> началось строительство местной церкви, завершённое в 1936 году;
+      в 1940 году село оказалось под советской властью, после чего начались массовые депортации жителей.
+    </p>
+    <p>
+      В <strong>1949 году</strong> был создан колхоз «1 Мая», первым председателем которого стал
+      <strong>Филип Лесник</strong>; развитие сельского хозяйства шло трудно из-за нехватки скота и инвентаря.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>География и современное положение</h2>
+    <p>
+      Село Болохан находится в северной части Оргеевского района, в аграрном регионе с развитым сельским хозяйством.
+    </p>
+    <p>
+      В современных справочниках и базах данных описывается как типичное село с небольшим населением,
+      с развитием сельхозпроизводства и тесной связью с местной общиной.
+    </p>
+  </section>
+
+{% elif request.LANGUAGE_CODE == 'ro' %}
+
+  <div class="hero">
+    <h1>Satul Bolohan</h1>
+    <p class="hero-subtitle">Raionul Orhei, Republica Moldova</p>
+  </div>
+
+  <section class="village-intro">
+    <p>
+      <strong>Bolohan</strong> — sat din raionul Orhei al Republicii Moldova, situat la aproximativ
+      40–50&nbsp;km nord de Chișinău. Nu formează o comună proprie și face parte din satele administrativ
+      subordonate raionului.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>Istorie și origine</h2>
+    <p>
+      Conform surselor locale, satul s-a format în <strong>1763</strong> pe pământurile unui moșii
+      moldovenești aparținând unui proprietar evreu pe nume <strong>Leiba Aron</strong>,
+      cu o suprafață de câteva mii de hectare.
+    </p>
+    <p>
+      Denumirea <em>„Bolohan"</em> este asociată cu o piatră mare („bolovan") de lângă curtea boierului,
+      de la care satul și-a primit numele.
+    </p>
+    <p>
+      Enciclopediile și sondajele sovietice menționează și alte date aproximative — 1788 și 1867 —
+      dar tradiția locală și bătrânii satelor citează cel mai des anul 1763.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>Populație și dezvoltare</h2>
+    <p>
+      În perioada pre-revoluționară, satul era mic, cu aproximativ <strong>200 de case</strong> și circa
+      <strong>800 de locuitori</strong>; locuințele și transportul erau puține, drumurile abia existau.
+    </p>
+    <p>
+      În <strong>1928</strong> a început construcția bisericii locale, finalizată în 1936; în 1940 satul
+      a ajuns sub puterea sovietică, după care au început deportările în masă ale locuitorilor.
+    </p>
+    <p>
+      În <strong>1949</strong> a fost creat colhozul „1 Mai", al cărui prim președinte a fost
+      <strong>Filip Lesnik</strong>; dezvoltarea agriculturii a fost dificilă din cauza lipsei de animale și inventar.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>Geografie și situație actuală</h2>
+    <p>
+      Satul Bolohan se află în partea de nord a raionului Orhei, într-o regiune agrară cu agricultură dezvoltată.
+    </p>
+    <p>
+      În cărțile de referință și bazele de date moderne este descris ca un sat tipic cu o populație mică,
+      cu producție agricolă în dezvoltare și legături strânse cu comunitatea locală.
+    </p>
+  </section>
+
+{% else %}
+
+  <div class="hero">
+    <h1>Bolohan Village</h1>
+    <p class="hero-subtitle">Orhei District, Republic of Moldova</p>
+  </div>
+
+  <section class="village-intro">
+    <p>
+      <strong>Bolohan</strong> is a village in the Orhei district of the Republic of Moldova,
+      located approximately 40–50&nbsp;km north of Chișinău. It does not form its own commune
+      and belongs to villages administratively subordinate to the district.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>History and Origins</h2>
+    <p>
+      According to local sources, the village was formed in <strong>1763</strong> on the lands of a
+      Moldavian estate belonging to a Jewish landowner named <strong>Leiba Aron</strong>,
+      covering an area of several thousand hectares.
+    </p>
+    <p>
+      The name <em>"Bolohan"</em> is associated with a large rock (<em>bolovan</em>) near the boyar's
+      courtyard, from which the village got its name.
+    </p>
+    <p>
+      Soviet encyclopedias and surveys also mention other approximate dates — 1788 and 1867 —
+      but local tradition and long-time residents most often cite 1763.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>Population and Development</h2>
+    <p>
+      In the pre-revolutionary period, the village was small, with about <strong>200 houses</strong>
+      and around <strong>800 residents</strong>; housing and transportation were scarce,
+      and roads barely existed.
+    </p>
+    <p>
+      In <strong>1928</strong>, construction of the local church began, completed in 1936;
+      in 1940, the village came under Soviet rule, after which mass deportations of residents began.
+    </p>
+    <p>
+      In <strong>1949</strong>, the "May 1st" collective farm (kolkhoz) was established,
+      with <strong>Filip Lesnik</strong> as its first chairman; agricultural development was difficult
+      due to a shortage of livestock and equipment.
+    </p>
+  </section>
+
+  <section class="village-section">
+    <h2>Geography and Current Situation</h2>
+    <p>
+      Bolohan village is located in the northern part of the Orhei district,
+      in an agrarian region with developed agriculture.
+    </p>
+    <p>
+      In modern reference books and databases, it is described as a typical village with a small population,
+      with developing agricultural production and close ties to the local community.
+    </p>
+  </section>
+
+{% endif %}
+
+{% endblock %}
