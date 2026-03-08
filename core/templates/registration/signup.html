@@ -53,6 +53,24 @@
     </div>
 
     <div class="form-group">
+      <label for="id_email">
+        {% if request.LANGUAGE_CODE == 'ru' %}Электронная почта
+        {% elif request.LANGUAGE_CODE == 'ro' %}Adresă de e-mail
+        {% else %}Email Address
+        {% endif %}
+      </label>
+      <input type="email" name="email" id="id_email"
+             autocomplete="email" required
+             {% if form.email.value %}value="{{ form.email.value }}"{% endif %}>
+      <span class="field-help">
+        {% if request.LANGUAGE_CODE == 'ru' %}На этот адрес придёт ссылка для подтверждения аккаунта.
+        {% elif request.LANGUAGE_CODE == 'ro' %}Un link de confirmare va fi trimis la această adresă.
+        {% else %}A confirmation link will be sent to this address.
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="form-group">
       <label for="id_password1">
         {% if request.LANGUAGE_CODE == 'ru' %}Пароль
         {% elif request.LANGUAGE_CODE == 'ro' %}Parolă

@@ -22,6 +22,21 @@
     {% endif %}
   </div>
 
+  {% if user.is_authenticated and not email_confirmed %}
+    <div class="auth-warning">
+      {% if request.LANGUAGE_CODE == 'ru' %}
+        ⚠️ Подтвердите свою электронную почту, чтобы размещать объявления.
+        Проверьте входящие — мы отправили вам ссылку при регистрации.
+      {% elif request.LANGUAGE_CODE == 'ro' %}
+        ⚠️ Confirmați e-mailul pentru a putea posta anunțuri.
+        Verificați căsuța poștală — am trimis un link la înregistrare.
+      {% else %}
+        ⚠️ Please confirm your email address to create listings.
+        Check your inbox — we sent a link when you registered.
+      {% endif %}
+    </div>
+  {% endif %}
+
   <div class="coming-soon">
     <div class="coming-soon-icon">🛒</div>
     {% if request.LANGUAGE_CODE == 'ru' %}

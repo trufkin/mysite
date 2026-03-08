@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  {% if valid %}
+    {% if request.LANGUAGE_CODE == 'ru' %}Почта подтверждена — Bolohan
+    {% elif request.LANGUAGE_CODE == 'ro' %}E-mail confirmat — Bolohan
+    {% else %}Email Confirmed — Bolohan
+    {% endif %}
+  {% else %}
+    {% if request.LANGUAGE_CODE == 'ru' %}Недействительная ссылка — Bolohan
+    {% elif request.LANGUAGE_CODE == 'ro' %}Link invalid — Bolohan
+    {% else %}Invalid Link — Bolohan
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+
+  {% if valid %}
+    <div class="auth-icon">✅</div>
+    <h1 class="auth-title">
+      {% if request.LANGUAGE_CODE == 'ru' %}Почта подтверждена!
+      {% elif request.LANGUAGE_CODE == 'ro' %}E-mail confirmat!
+      {% else %}Email Confirmed!
+      {% endif %}
+    </h1>
+    <p class="auth-info">
+      {% if request.LANGUAGE_CODE == 'ru' %}
+        Ваш аккаунт активирован. Теперь вы можете размещать объявления.
+      {% elif request.LANGUAGE_CODE == 'ro' %}
+        Contul dvs. a fost activat. Acum puteți posta anunțuri.
+      {% else %}
+        Your account is now active. You can now create listings on the Marketplace.
+      {% endif %}
+    </p>
+    <a href="{% url 'marketplace' %}" class="btn-primary">
+      {% if request.LANGUAGE_CODE == 'ru' %}Перейти на рынок
+      {% elif request.LANGUAGE_CODE == 'ro' %}Mergi la piață
+      {% else %}Go to Marketplace
+      {% endif %}
+    </a>
+
+  {% else %}
+    <div class="auth-icon">❌</div>
+    <h1 class="auth-title">
+      {% if request.LANGUAGE_CODE == 'ru' %}Ссылка недействительна
+      {% elif request.LANGUAGE_CODE == 'ro' %}Link invalid sau expirat
+      {% else %}Link Invalid or Expired
+      {% endif %}
+    </h1>
+    <p class="auth-info">
+      {% if request.LANGUAGE_CODE == 'ru' %}
+        Эта ссылка недействительна или срок её действия истёк (3 дня). Зарегистрируйтесь снова, чтобы получить новую ссылку.
+      {% elif request.LANGUAGE_CODE == 'ro' %}
+        Acest link este invalid sau a expirat (3 zile). Înregistrați-vă din nou pentru a primi un link nou.
+      {% else %}
+        This confirmation link is invalid or has expired (links are valid for 3 days).
+        Please sign up again to receive a new link.
+      {% endif %}
+    </p>
+    <a href="{% url 'signup' %}" class="btn-primary">
+      {% if request.LANGUAGE_CODE == 'ru' %}Зарегистрироваться снова
+      {% elif request.LANGUAGE_CODE == 'ro' %}Înregistrați-vă din nou
+      {% else %}Sign Up Again
+      {% endif %}
+    </a>
+  {% endif %}
+
+</div>
+{% endblock %}

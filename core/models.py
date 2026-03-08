@@ -76,3 +76,16 @@ class Listing(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserProfile(models.Model):
+    """Extends the built-in User with email confirmation status."""
+    user            = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='profile',
+    )
+    email_confirmed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username} profile'

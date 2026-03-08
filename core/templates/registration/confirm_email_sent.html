@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Подтвердите почту — Bolohan
+  {% elif request.LANGUAGE_CODE == 'ro' %}Confirmați e-mailul — Bolohan
+  {% else %}Confirm Your Email — Bolohan
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+  <div class="auth-icon">✉️</div>
+
+  <h1 class="auth-title">
+    {% if request.LANGUAGE_CODE == 'ru' %}Проверьте почту
+    {% elif request.LANGUAGE_CODE == 'ro' %}Verificați e-mailul
+    {% else %}Check Your Inbox
+    {% endif %}
+  </h1>
+
+  <p class="auth-info">
+    {% if request.LANGUAGE_CODE == 'ru' %}
+      Мы отправили ссылку для подтверждения на
+      {% if email %}<strong>{{ email }}</strong>{% else %}ваш адрес электронной почты{% endif %}.
+      Пожалуйста, откройте письмо и нажмите на ссылку, чтобы активировать аккаунт.
+    {% elif request.LANGUAGE_CODE == 'ro' %}
+      Am trimis un link de confirmare la
+      {% if email %}<strong>{{ email }}</strong>{% else %}adresa dvs. de e-mail{% endif %}.
+      Vă rugăm să deschideți e-mailul și să faceți clic pe link pentru a activa contul.
+    {% else %}
+      We've sent a confirmation link to
+      {% if email %}<strong>{{ email }}</strong>{% else %}your email address{% endif %}.
+      Please open the email and click the link to activate your account.
+    {% endif %}
+  </p>
+
+  <p class="auth-hint">
+    {% if request.LANGUAGE_CODE == 'ru' %}Письмо может попасть в папку «Спам».
+    {% elif request.LANGUAGE_CODE == 'ro' %}E-mailul poate ajunge în dosarul Spam.
+    {% else %}The email may take a few minutes to arrive. Check your spam folder if needed.
+    {% endif %}
+  </p>
+
+  <p class="auth-switch">
+    <a href="{% url 'home' %}">
+      {% if request.LANGUAGE_CODE == 'ru' %}← На главную
+      {% elif request.LANGUAGE_CODE == 'ro' %}← Acasă
+      {% else %}← Back to home
+      {% endif %}
+    </a>
+  </p>
+</div>
+{% endblock %}

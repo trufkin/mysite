@@ -553,3 +553,17 @@ h2 { color: #1e293b; }
 .coming-soon h2 { color: #1e3a5f; margin-bottom: 0.75rem; }
 .coming-soon p  { color: #64748b; max-width: 480px; margin: 0 auto; line-height: 1.7; }
 
+/* ── Auth confirmation pages ──────────────────────────────── */
+.auth-icon   { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.auth-info   { color: #374151; line-height: 1.7; margin: 1rem 0; }
+.auth-hint   { color: #6b7280; font-size: 0.875rem; margin-top: 0.5rem; }
+.auth-warning {
+  background: #fef9c3;
+  border: 1px solid #fde047;
+  border-radius: 8px;
+  padding: 0.875rem 1.25rem;
+  margin-bottom: 1.25rem;
+  color: #713f12;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}

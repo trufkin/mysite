@@ -1,9 +1,10 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.core import mail, signing
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
-from core.models import Post, Hero
+from core.models import Post, Hero, UserProfile
 
 User = get_user_model()
 
@@ -262,6 +263,14 @@ class AuthTests(TestCase):
 
 # ── Sign Up ─────────────────────────────────────────────────────────────────────
 
+_VALID_SIGNUP = {
+    'username': 'newvillager',
+    'email': 'newvillager@example.com',
+    'password1': 'Str0ngPass!',
+    'password2': 'Str0ngPass!',
+}
+
+
 class SignUpTests(TestCase):
     def setUp(self):
         self.client = Client()
@@ -271,30 +280,50 @@ class SignUpTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, '<form')
 
-    def test_signup_creates_user_and_logs_in(self):
-        resp = self.client.post(reverse('signup'), {
-            'username': 'newvillager',
-            'password1': 'Str0ngPass!',
-            'password2': 'Str0ngPass!',
-        })
+    def test_signup_page_has_email_field(self):
+        resp = self.client.get(reverse('signup'))
+        self.assertContains(resp, 'id_email')
+
+    def test_signup_creates_user_without_auto_login(self):
+        """After registration the user is NOT logged in automatically."""
+        resp = self.client.post(reverse('signup'), _VALID_SIGNUP)
         self.assertEqual(resp.status_code, 302)
         self.assertTrue(User.objects.filter(username='newvillager').exists())
-        self.assertTrue(resp.wsgi_request.user.is_authenticated)
+        self.assertFalse(resp.wsgi_request.user.is_authenticated)
 
-    def test_signup_redirect_goes_to_home(self):
-        resp = self.client.post(reverse('signup'), {
-            'username': 'newvillager2',
-            'password1': 'Str0ngPass!',
-            'password2': 'Str0ngPass!',
-        })
-        self.assertRedirects(resp, '/')
+    def test_signup_saves_email_on_user(self):
+        self.client.post(reverse('signup'), _VALID_SIGNUP)
+        user = User.objects.get(username='newvillager')
+        self.assertEqual(user.email, 'newvillager@example.com')
+
+    def test_signup_creates_unconfirmed_profile(self):
+        self.client.post(reverse('signup'), _VALID_SIGNUP)
+        user = User.objects.get(username='newvillager')
+        self.assertFalse(user.profile.email_confirmed)
+
+    def test_signup_redirects_to_confirm_email_sent(self):
+        resp = self.client.post(reverse('signup'), _VALID_SIGNUP)
+        # Redirect URL starts with /confirm-email-sent/
+        self.assertEqual(resp.status_code, 302)
+        self.assertIn('confirm-email-sent', resp['Location'])
+
+    def test_signup_requires_email(self):
+        data = dict(_VALID_SIGNUP, username='nomail')
+        del data['email']
+        resp = self.client.post(reverse('signup'), data)
+        self.assertEqual(resp.status_code, 200)   # form re-rendered
+        self.assertFalse(User.objects.filter(username='nomail').exists())
+
+    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    def test_signup_sends_confirmation_email(self):
+        self.client.post(reverse('signup'), _VALID_SIGNUP)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ['newvillager@example.com'])
+        self.assertIn('confirm', mail.outbox[0].body.lower())
 
     def test_signup_mismatched_passwords_shows_error(self):
-        resp = self.client.post(reverse('signup'), {
-            'username': 'newvillager3',
-            'password1': 'Str0ngPass!',
-            'password2': 'WrongPass!',
-        })
+        data = dict(_VALID_SIGNUP, username='newvillager3', password2='WrongPass!')
+        resp = self.client.post(reverse('signup'), data)
         self.assertEqual(resp.status_code, 200)
         self.assertFalse(User.objects.filter(username='newvillager3').exists())
 
@@ -305,3 +334,55 @@ class SignUpTests(TestCase):
     def test_topbar_shows_signup_when_anonymous(self):
         resp = self.client.get(reverse('home'))
         self.assertContains(resp, 'auth-btn-signup')
+
+    # ── Email confirmation ───────────────────────────────────────────────────
+
+    def test_email_confirmation_confirms_user_and_logs_in(self):
+        user = User.objects.create_user(
+            username='toconfirm', email='tc@example.com', password='Str0ngPass!'
+        )
+        self.assertFalse(user.profile.email_confirmed)
+
+        token = signing.dumps(user.pk, salt='bolohan-email-confirm')
+        resp = self.client.get(reverse('confirm_email', args=[token]))
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.wsgi_request.user.is_authenticated)
+        user.profile.refresh_from_db()
+        self.assertTrue(user.profile.email_confirmed)
+
+    def test_email_confirmation_shows_success_context(self):
+        user = User.objects.create_user(
+            username='toconfirm2', email='tc2@example.com', password='Str0ngPass!'
+        )
+        token = signing.dumps(user.pk, salt='bolohan-email-confirm')
+        resp = self.client.get(reverse('confirm_email', args=[token]))
+        self.assertTrue(resp.context['valid'])
+
+    def test_invalid_confirmation_token_shows_error(self):
+        resp = self.client.get(reverse('confirm_email', args=['bad-token']))
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse(resp.context['valid'])
+
+    # ── Marketplace ad gate ──────────────────────────────────────────────────
+
+    def test_unconfirmed_user_sees_warning_on_marketplace(self):
+        user = User.objects.create_user(
+            username='unc', email='unc@example.com', password='Str0ngPass!'
+        )
+        self.client.login(username='unc', password='Str0ngPass!')
+        resp = self.client.get(reverse('marketplace'))
+        self.assertFalse(resp.context['email_confirmed'])
+        self.assertContains(resp, 'auth-warning')
+
+    def test_confirmed_user_no_warning_on_marketplace(self):
+        user = User.objects.create_user(
+            username='conf', email='conf@example.com', password='Str0ngPass!'
+        )
+        user.profile.email_confirmed = True
+        user.profile.save()
+        self.client.login(username='conf', password='Str0ngPass!')
+        resp = self.client.get(reverse('marketplace'))
+        self.assertTrue(resp.context['email_confirmed'])
+        self.assertNotContains(resp, 'auth-warning')
+

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Hero, Listing
+from .models import Post, Hero, Listing, UserProfile
 
 
 @admin.register(Post)
@@ -35,3 +35,11 @@ class ListingAdmin(admin.ModelAdmin):
     list_filter   = ['is_active']
     search_fields = ['title', 'description', 'owner__username']
     readonly_fields = ['created', 'updated']
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display  = ['user', 'email_confirmed']
+    list_filter   = ['email_confirmed']
+    search_fields = ['user__username', 'user__email']
+    readonly_fields = ['user']

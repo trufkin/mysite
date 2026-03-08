@@ -1,0 +1,11 @@
+Hi {{ username }},
+
+Thank you for registering on Bolohan.md!
+
+Please confirm your email address by clicking the link below:
+
+{{ confirmation_url }}
+
+This link expires in 3 days. If you did not create an account, you can safely ignore this message.
+
+— The Bolohan team
