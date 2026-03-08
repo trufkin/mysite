@@ -64,5 +64,18 @@
 
   </form>
 
+  <p class="auth-switch">
+    {% if request.LANGUAGE_CODE == 'ru' %}Ещё нет аккаунта?
+    {% elif request.LANGUAGE_CODE == 'ro' %}Nu aveți un cont?
+    {% else %}Don't have an account?
+    {% endif %}
+    <a href="{% url 'signup' %}">
+      {% if request.LANGUAGE_CODE == 'ru' %}Зарегистрироваться
+      {% elif request.LANGUAGE_CODE == 'ro' %}Înregistrați-vă
+      {% else %}Sign Up
+      {% endif %}
+    </a>
+  </p>
+
 </div>
 {% endblock %}

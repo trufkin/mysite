@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Регистрация — Bolohan
+  {% elif request.LANGUAGE_CODE == 'ro' %}Înregistrare — Bolohan
+  {% else %}Sign Up — Bolohan
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+
+  <h1 class="auth-title">
+    {% if request.LANGUAGE_CODE == 'ru' %}Создать аккаунт
+    {% elif request.LANGUAGE_CODE == 'ro' %}Creați un cont
+    {% else %}Create an Account
+    {% endif %}
+  </h1>
+
+  {% if form.errors %}
+    <div class="auth-error">
+      {% for field in form %}
+        {% for error in field.errors %}
+          <p>{{ field.label }}: {{ error }}</p>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="id_username">
+        {% if request.LANGUAGE_CODE == 'ru' %}Имя пользователя
+        {% elif request.LANGUAGE_CODE == 'ro' %}Nume de utilizator
+        {% else %}Username
+        {% endif %}
+      </label>
+      <input type="text" name="username" id="id_username"
+             autofocus autocomplete="username" required maxlength="150"
+             {% if form.username.value %}value="{{ form.username.value }}"{% endif %}>
+      <span class="field-help">
+        {% if request.LANGUAGE_CODE == 'ru' %}Только буквы, цифры и символы @/./+/-/_
+        {% elif request.LANGUAGE_CODE == 'ro' %}Doar litere, cifre și caracterele @/./+/-/_
+        {% else %}Letters, digits and @/./+/-/_ only.
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="id_password1">
+        {% if request.LANGUAGE_CODE == 'ru' %}Пароль
+        {% elif request.LANGUAGE_CODE == 'ro' %}Parolă
+        {% else %}Password
+        {% endif %}
+      </label>
+      <input type="password" name="password1" id="id_password1"
+             autocomplete="new-password" required>
+      <span class="field-help">
+        {% if request.LANGUAGE_CODE == 'ru' %}Минимум 8 символов. Пароль не должен быть слишком простым.
+        {% elif request.LANGUAGE_CODE == 'ro' %}Cel puțin 8 caractere. Parola nu trebuie să fie prea simplă.
+        {% else %}Minimum 8 characters. Not too common or entirely numeric.
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="id_password2">
+        {% if request.LANGUAGE_CODE == 'ru' %}Подтверждение пароля
+        {% elif request.LANGUAGE_CODE == 'ro' %}Confirmare parolă
+        {% else %}Confirm Password
+        {% endif %}
+      </label>
+      <input type="password" name="password2" id="id_password2"
+             autocomplete="new-password" required>
+    </div>
+
+    <button type="submit" class="btn-primary">
+      {% if request.LANGUAGE_CODE == 'ru' %}Зарегистрироваться
+      {% elif request.LANGUAGE_CODE == 'ro' %}Înregistrare
+      {% else %}Create Account
+      {% endif %}
+    </button>
+
+  </form>
+
+  <p class="auth-switch">
+    {% if request.LANGUAGE_CODE == 'ru' %}Уже есть аккаунт?
+    {% elif request.LANGUAGE_CODE == 'ro' %}Aveți deja un cont?
+    {% else %}Already have an account?
+    {% endif %}
+    <a href="{% url 'login' %}">
+      {% if request.LANGUAGE_CODE == 'ru' %}Войти
+      {% elif request.LANGUAGE_CODE == 'ro' %}Conectare
+      {% else %}Sign In
+      {% endif %}
+    </a>
+  </p>
+
+</div>
+{% endblock %}

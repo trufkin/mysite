@@ -205,6 +205,13 @@ h2 { color: #1e293b; }
   color: #1e3a5f;
 }
 
+.auth-btn-signup {
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.auth-btn-signup:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
 .auth-btn-admin {
   background: rgba(255,255,255,0.12);
   color: rgba(255,255,255,0.9);
@@ -297,6 +304,20 @@ h2 { color: #1e293b; }
   text-decoration: none;
 }
 .btn-primary:hover { background: #16305a; text-decoration: none; color: #fff; }
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+.auth-switch a { color: #2563eb; font-weight: 600; }
+
+.field-help {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  margin-top: 0.1rem;
+}
 
 /* ── Pagination ───────────────────────────────────────────── */
 .pagination { margin-top: 1.5rem; }

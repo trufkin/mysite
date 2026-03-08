@@ -258,3 +258,50 @@ class AuthTests(TestCase):
         self.client.login(username='villager', password='pass1234')
         resp = self.client.get(reverse('home'))
         self.assertNotContains(resp, 'auth-btn-admin')
+
+
+# ── Sign Up ─────────────────────────────────────────────────────────────────────
+
+class SignUpTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_signup_page_renders(self):
+        resp = self.client.get(reverse('signup'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, '<form')
+
+    def test_signup_creates_user_and_logs_in(self):
+        resp = self.client.post(reverse('signup'), {
+            'username': 'newvillager',
+            'password1': 'Str0ngPass!',
+            'password2': 'Str0ngPass!',
+        })
+        self.assertEqual(resp.status_code, 302)
+        self.assertTrue(User.objects.filter(username='newvillager').exists())
+        self.assertTrue(resp.wsgi_request.user.is_authenticated)
+
+    def test_signup_redirect_goes_to_home(self):
+        resp = self.client.post(reverse('signup'), {
+            'username': 'newvillager2',
+            'password1': 'Str0ngPass!',
+            'password2': 'Str0ngPass!',
+        })
+        self.assertRedirects(resp, '/')
+
+    def test_signup_mismatched_passwords_shows_error(self):
+        resp = self.client.post(reverse('signup'), {
+            'username': 'newvillager3',
+            'password1': 'Str0ngPass!',
+            'password2': 'WrongPass!',
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse(User.objects.filter(username='newvillager3').exists())
+
+    def test_login_page_has_signup_link(self):
+        resp = self.client.get(reverse('login'))
+        self.assertContains(resp, reverse('signup'))
+
+    def test_topbar_shows_signup_when_anonymous(self):
+        resp = self.client.get(reverse('home'))
+        self.assertContains(resp, 'auth-btn-signup')
