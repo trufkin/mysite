@@ -14,6 +14,8 @@
       <a class="brand" href="{% url 'home' %}">Bolohan</a>
       <ul class="nav-links">
         <li><a href="{% url 'home' %}"{% if request.resolver_match.url_name == 'home' %} class="active"{% endif %}>{% trans "Home" %}</a></li>
+        <li><a href="{% url 'heroes' %}"{% if request.resolver_match.url_name == 'heroes' or request.resolver_match.url_name == 'hero_detail' %} class="active"{% endif %}>{% trans "Heroes" %}</a></li>
+        <li><a href="{% url 'marketplace' %}"{% if request.resolver_match.url_name == 'marketplace' %} class="active"{% endif %}>{% trans "Marketplace" %}</a></li>
         <li><a href="{% url 'contacts' %}"{% if request.resolver_match.url_name == 'contacts' %} class="active"{% endif %}>{% trans "Contacts" %}</a></li>
       </ul>
       <div class="lang-switcher">

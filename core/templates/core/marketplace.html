@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Рынок — Bolohan
+  {% elif request.LANGUAGE_CODE == 'ro' %}Piața — Bolohan
+  {% else %}Marketplace — Bolohan
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="page-header">
+    {% if request.LANGUAGE_CODE == 'ru' %}
+      <h1>Рынок</h1>
+      <p class="page-subtitle">Местные объявления купли, продажи и обмена</p>
+    {% elif request.LANGUAGE_CODE == 'ro' %}
+      <h1>Piața</h1>
+      <p class="page-subtitle">Anunțuri locale de vânzare, cumpărare și schimb</p>
+    {% else %}
+      <h1>Marketplace</h1>
+      <p class="page-subtitle">Local buy, sell and trade listings</p>
+    {% endif %}
+  </div>
+
+  <div class="coming-soon">
+    <div class="coming-soon-icon">🛒</div>
+    {% if request.LANGUAGE_CODE == 'ru' %}
+      <h2>Скоро открытие</h2>
+      <p>Раздел объявлений находится в разработке. Здесь зарегистрированные пользователи смогут размещать свои объявления.</p>
+    {% elif request.LANGUAGE_CODE == 'ro' %}
+      <h2>În curând</h2>
+      <p>Secțiunea de anunțuri este în curs de dezvoltare. Aici utilizatorii înregistrați vor putea publica propriile anunțuri.</p>
+    {% else %}
+      <h2>Coming Soon</h2>
+      <p>The listings section is under development. Registered users will be able to post and manage their own listings here.</p>
+    {% endif %}
+  </div>
+
+{% endblock %}

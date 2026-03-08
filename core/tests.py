@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
-from core.models import Post
+from core.models import Post, Hero
 
 User = get_user_model()
 
@@ -132,3 +132,79 @@ class PostAPITests(TestCase):
         resp = self.client.get('/api/posts/')
         self.assertIn('count', resp.data)
         self.assertIn('results', resp.data)
+
+
+# ── Heroes & Marketplace ───────────────────────────────────────────────────────
+
+class HeroTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.hero = Hero.objects.create(
+            name='Ion Croitorul',
+            slug='ion-croitorul',
+            category=Hero.Category.CRAFTSMAN,
+            tagline='The best tailor in the village',
+            description_en='Ion has been tailoring clothes for over 30 years.',
+            description_ro='Ion a croit haine de peste 30 de ani.',
+            description_ru='Ион шьёт одежду уже более 30 лет.',
+            services='Custom tailoring, Alterations, Repairs',
+            phone='+373 600 00000',
+            email='ion@bolohan.md',
+        )
+
+    # Model
+    def test_hero_str(self):
+        self.assertEqual(str(self.hero), 'Ion Croitorul')
+
+    def test_hero_get_description_en(self):
+        self.assertIn('30 years', self.hero.get_description('en'))
+
+    def test_hero_get_description_ru(self):
+        self.assertIn('30', self.hero.get_description('ru'))
+
+    def test_hero_get_description_fallback(self):
+        """If requested language is missing, fall back to EN."""
+        hero = Hero.objects.create(
+            name='Test Person', slug='test-person',
+            category=Hero.Category.FARMER,
+            description_en='English only',
+        )
+        self.assertEqual(hero.get_description('ro'), 'English only')
+
+    # Views
+    def test_heroes_list_view(self):
+        resp = self.client.get(reverse('heroes'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'Ion Croitorul')
+
+    def test_heroes_list_inactive_hidden(self):
+        self.hero.is_active = False
+        self.hero.save()
+        resp = self.client.get(reverse('heroes'))
+        self.assertNotContains(resp, 'Ion Croitorul')
+
+    def test_hero_detail_view(self):
+        resp = self.client.get(reverse('hero_detail', args=[self.hero.slug]))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'Ion Croitorul')
+        self.assertContains(resp, '+373 600 00000')
+
+    def test_hero_detail_context_description(self):
+        resp = self.client.get(reverse('hero_detail', args=[self.hero.slug]))
+        self.assertIn('description', resp.context)
+        self.assertIn('30 years', resp.context['description'])
+
+    def test_hero_detail_services_list(self):
+        resp = self.client.get(reverse('hero_detail', args=[self.hero.slug]))
+        self.assertIn('services_list', resp.context)
+        self.assertIn('Custom tailoring', resp.context['services_list'])
+
+    def test_hero_detail_404_for_inactive(self):
+        self.hero.is_active = False
+        self.hero.save()
+        resp = self.client.get(reverse('hero_detail', args=[self.hero.slug]))
+        self.assertEqual(resp.status_code, 404)
+
+    def test_marketplace_view(self):
+        resp = self.client.get(reverse('marketplace'))
+        self.assertEqual(resp.status_code, 200)

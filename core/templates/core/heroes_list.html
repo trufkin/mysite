@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Герои Болохана — Bolohan
+  {% elif request.LANGUAGE_CODE == 'ro' %}Eroii Bolohanului — Bolohan
+  {% else %}Bolohan Heroes — Bolohan
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="page-header">
+    {% if request.LANGUAGE_CODE == 'ru' %}
+      <h1>Герои Болохана</h1>
+      <p class="page-subtitle">Мастера, фермеры и специалисты нашего села</p>
+    {% elif request.LANGUAGE_CODE == 'ro' %}
+      <h1>Eroii Bolohanului</h1>
+      <p class="page-subtitle">Meșteri, fermieri și specialiști din satul nostru</p>
+    {% else %}
+      <h1>Bolohan Heroes</h1>
+      <p class="page-subtitle">Craftsmen, farmers and specialists of our village</p>
+    {% endif %}
+  </div>
+
+  {% if heroes %}
+    <div class="heroes-grid">
+      {% for hero in heroes %}
+        <a class="hero-card" href="{% url 'hero_detail' hero.slug %}">
+
+          <div class="hero-card-photo">
+            {% if hero.photo %}
+              <img src="{{ hero.photo.url }}" alt="{{ hero.name }}">
+            {% else %}
+              <div class="hero-card-initials">{{ hero.name|slice:":1" }}</div>
+            {% endif %}
+          </div>
+
+          <div class="hero-card-body">
+            <span class="badge badge-{{ hero.category }}">{{ hero.get_category_display }}</span>
+            <h2 class="hero-card-name">{{ hero.name }}</h2>
+            {% if hero.tagline %}
+              <p class="hero-card-tagline">{{ hero.tagline }}</p>
+            {% endif %}
+
+            <p class="hero-card-desc">
+              {% if request.LANGUAGE_CODE == 'ru' %}
+                {{ hero.description_ru|default:hero.description_en|truncatewords:22 }}
+              {% elif request.LANGUAGE_CODE == 'ro' %}
+                {{ hero.description_ro|default:hero.description_en|truncatewords:22 }}
+              {% else %}
+                {{ hero.description_en|truncatewords:22 }}
+              {% endif %}
+            </p>
+
+            {% if hero.phone or hero.email %}
+              <div class="hero-card-contacts">
+                {% if hero.phone %}<span class="contact-chip">📞 {{ hero.phone }}</span>{% endif %}
+                {% if hero.email %}<span class="contact-chip">✉ {{ hero.email }}</span>{% endif %}
+              </div>
+            {% endif %}
+          </div>
+
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      {% if request.LANGUAGE_CODE == 'ru' %}
+        <p>Истории героев скоро появятся. Возвращайтесь!</p>
+      {% elif request.LANGUAGE_CODE == 'ro' %}
+        <p>Poveștile eroilor vor apărea în curând. Reveniți!</p>
+      {% else %}
+        <p>Hero stories coming soon. Check back later!</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+{% endblock %}

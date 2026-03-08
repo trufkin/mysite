@@ -1,0 +1,87 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ object.name }} — Bolohan{% endblock %}
+
+{% block content %}
+
+  <div class="biz-card">
+
+    <div class="biz-card-header">
+      <div class="biz-card-photo">
+        {% if object.photo %}
+          <img src="{{ object.photo.url }}" alt="{{ object.name }}">
+        {% else %}
+          <div class="biz-card-initials">{{ object.name|slice:":1" }}</div>
+        {% endif %}
+      </div>
+
+      <div class="biz-card-identity">
+        <span class="badge badge-{{ object.category }}">{{ object.get_category_display }}</span>
+        <h1 class="biz-card-name">{{ object.name }}</h1>
+        {% if object.tagline %}
+          <p class="biz-card-tagline">"{{ object.tagline }}"</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if description %}
+      <div class="biz-card-description">
+        {{ description|linebreaks }}
+      </div>
+    {% endif %}
+
+    {% if services_list %}
+      <div class="biz-card-section">
+        <h3>
+          {% if request.LANGUAGE_CODE == 'ru' %}Услуги
+          {% elif request.LANGUAGE_CODE == 'ro' %}Servicii
+          {% else %}Services
+          {% endif %}
+        </h3>
+        <ul class="services-list">
+          {% for service in services_list %}
+            <li>{{ service }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="biz-card-contacts-full">
+      <h3>
+        {% if request.LANGUAGE_CODE == 'ru' %}Контакты
+        {% elif request.LANGUAGE_CODE == 'ro' %}Contacte
+        {% else %}Contact
+        {% endif %}
+      </h3>
+      <ul class="contacts-list">
+        {% if object.phone %}
+          <li>
+            <strong>
+              {% if request.LANGUAGE_CODE == 'ru' %}Телефон{% elif request.LANGUAGE_CODE == 'ro' %}Telefon{% else %}Phone{% endif %}:
+            </strong>
+            <a href="tel:{{ object.phone }}">{{ object.phone }}</a>
+          </li>
+        {% endif %}
+        {% if object.email %}
+          <li>
+            <strong>Email:</strong>
+            <a href="mailto:{{ object.email }}">{{ object.email }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <p class="back-link">
+      <a href="{% url 'heroes' %}">
+        &#8592;
+        {% if request.LANGUAGE_CODE == 'ru' %}Все герои
+        {% elif request.LANGUAGE_CODE == 'ro' %}Toți eroii
+        {% else %}All Heroes
+        {% endif %}
+      </a>
+    </p>
+
+  </div>
+
+{% endblock %}
