@@ -38,6 +38,7 @@ if settings.DEBUG:
 
 # Language-prefixed URLs for the website frontend
 urlpatterns += i18n_patterns(
+    path('', include('django.contrib.auth.urls')),
     path('', include('core.urls')),
     prefix_default_language=False,
 )

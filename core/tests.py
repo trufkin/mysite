@@ -208,3 +208,42 @@ class HeroTests(TestCase):
     def test_marketplace_view(self):
         resp = self.client.get(reverse('marketplace'))
         self.assertEqual(resp.status_code, 200)
+
+
+# ── Auth ───────────────────────────────────────────────────────────────────────
+
+class AuthTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='villager', password='pass1234')
+
+    def test_login_page_renders(self):
+        resp = self.client.get(reverse('login'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, '<form')
+
+    def test_login_valid_credentials(self):
+        resp = self.client.post(reverse('login'), {'username': 'villager', 'password': 'pass1234'})
+        self.assertEqual(resp.status_code, 302)
+        self.assertTrue(resp.wsgi_request.user.is_authenticated)
+
+    def test_login_invalid_credentials(self):
+        resp = self.client.post(reverse('login'), {'username': 'villager', 'password': 'wrong'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertFalse(resp.wsgi_request.user.is_authenticated)
+
+    def test_logout(self):
+        self.client.login(username='villager', password='pass1234')
+        resp = self.client.post(reverse('logout'))
+        self.assertIn(resp.status_code, [200, 302])
+        self.assertFalse(resp.wsgi_request.user.is_authenticated)
+
+    def test_nav_shows_login_when_anonymous(self):
+        resp = self.client.get(reverse('home'))
+        self.assertContains(resp, 'href=')
+        self.assertContains(resp, 'login')
+
+    def test_nav_shows_username_when_authenticated(self):
+        self.client.login(username='villager', password='pass1234')
+        resp = self.client.get(reverse('home'))
+        self.assertContains(resp, 'villager')

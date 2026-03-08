@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% if request.LANGUAGE_CODE == 'ru' %}Вход — Bolohan
+  {% elif request.LANGUAGE_CODE == 'ro' %}Autentificare — Bolohan
+  {% else %}Login — Bolohan
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+
+  <h1 class="auth-title">
+    {% if request.LANGUAGE_CODE == 'ru' %}Вход в аккаунт
+    {% elif request.LANGUAGE_CODE == 'ro' %}Autentificare
+    {% else %}Sign In
+    {% endif %}
+  </h1>
+
+  {% if form.errors %}
+    <div class="auth-error">
+      {% if request.LANGUAGE_CODE == 'ru' %}Неверное имя пользователя или пароль. Попробуйте ещё раз.
+      {% elif request.LANGUAGE_CODE == 'ro' %}Nume de utilizator sau parolă incorecte. Încercați din nou.
+      {% else %}Incorrect username or password. Please try again.
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="id_username">
+        {% if request.LANGUAGE_CODE == 'ru' %}Имя пользователя
+        {% elif request.LANGUAGE_CODE == 'ro' %}Nume de utilizator
+        {% else %}Username
+        {% endif %}
+      </label>
+      <input type="text" name="username" id="id_username"
+             autofocus autocomplete="username" required
+             {% if form.username.value %}value="{{ form.username.value }}"{% endif %}>
+    </div>
+
+    <div class="form-group">
+      <label for="id_password">
+        {% if request.LANGUAGE_CODE == 'ru' %}Пароль
+        {% elif request.LANGUAGE_CODE == 'ro' %}Parolă
+        {% else %}Password
+        {% endif %}
+      </label>
+      <input type="password" name="password" id="id_password"
+             autocomplete="current-password" required>
+    </div>
+
+    <input type="hidden" name="next" value="{{ next }}">
+
+    <button type="submit" class="btn-primary">
+      {% if request.LANGUAGE_CODE == 'ru' %}Войти
+      {% elif request.LANGUAGE_CODE == 'ro' %}Conectare
+      {% else %}Sign In
+      {% endif %}
+    </button>
+
+  </form>
+
+</div>
+{% endblock %}
