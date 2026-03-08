@@ -247,3 +247,14 @@ class AuthTests(TestCase):
         self.client.login(username='villager', password='pass1234')
         resp = self.client.get(reverse('home'))
         self.assertContains(resp, 'villager')
+
+    def test_nav_shows_admin_link_for_staff(self):
+        staff = User.objects.create_user(username='staff', password='pass1234', is_staff=True)
+        self.client.login(username='staff', password='pass1234')
+        resp = self.client.get(reverse('home'))
+        self.assertContains(resp, '/admin/')
+
+    def test_nav_hides_admin_link_for_regular_user(self):
+        self.client.login(username='villager', password='pass1234')
+        resp = self.client.get(reverse('home'))
+        self.assertNotContains(resp, 'auth-btn-admin')

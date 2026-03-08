@@ -25,6 +25,9 @@
       </div>
       <div class="topbar-auth">
         {% if request.user.is_authenticated %}
+          {% if request.user.is_staff %}
+            <a class="auth-btn auth-btn-admin" href="/admin/" target="_blank">Admin</a>
+          {% endif %}
           <span class="auth-username">{{ request.user.username }}</span>
           <form method="post" action="{% url 'logout' %}" style="display:inline">
             {% csrf_token %}
